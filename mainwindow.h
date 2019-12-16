@@ -199,6 +199,8 @@ private slots:
 
     void on_actionSaveCanvas_triggered();
 
+    void on_actionSetColor_triggered();
+
 private:
     Ui::MainWindow *ui;
 

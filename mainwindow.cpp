@@ -19,6 +19,7 @@
 #include <QFileDialog>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QColorDialog>
 
 bool operator<(const QPoint &p1, const QPoint &p2)
 {
@@ -1423,4 +1424,17 @@ void MainWindow::on_actionSaveCanvas_triggered()
     if (fileName.isEmpty())
         return;
     saveCanvas(fileName);
+}
+
+void MainWindow::on_actionSetColor_triggered()
+{
+    QColorDialog qColorDialog;
+    QColor color = qColorDialog.getColor();
+    if(color.isValid()){
+        setColor(color.red(),color.green(),color.blue());
+        qDebug()<<"color changed";
+    }
+    else{
+        qDebug()<<"canceled";
+    }
 }
