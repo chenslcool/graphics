@@ -17,6 +17,14 @@ public:
 
 private slots:
 
+    void on_actionDrawPolygon_triggered();
+
+    void on_actionDrwaCurve_triggered();
+
+    void on_actionDrawLine_triggered();
+
+    void on_actionresetCanvas_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

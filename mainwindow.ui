@@ -67,6 +67,7 @@
    <addaction name="actionSaveCanvas"/>
    <addaction name="separator"/>
    <addaction name="actionSetColor"/>
+   <addaction name="actionresetCanvas"/>
   </widget>
   <action name="actionDrawLine">
    <property name="icon">
@@ -165,6 +166,15 @@
    </property>
    <property name="text">
     <string>SetColor</string>
+   </property>
+  </action>
+  <action name="actionresetCanvas">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/images/reset.jpg</normaloff>:/images/images/reset.jpg</iconset>
+   </property>
+   <property name="text">
+    <string>resetCanvas</string>
    </property>
   </action>
  </widget>
