@@ -15,6 +15,7 @@ public:
     explicit PolygonDialog(QWidget *parent = nullptr);
     ~PolygonDialog();
     int getLineNum();
+    QString getType();
 private:
     Ui::PolygonDialog *ui;
 };

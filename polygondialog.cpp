@@ -17,3 +17,8 @@ int PolygonDialog::getLineNum()
 {
     return ui->spinBoxPolygonLineNum->text().toInt();
 }
+
+QString PolygonDialog::getType()
+{
+    return  ui->comboBoxPloygonType->currentText();
+}

@@ -4,7 +4,7 @@
 #include <QPoint>
 #include <QColor>
 
-class Widget;
+class MainWindow;
 class Shape{
 protected:
     int id;
@@ -20,7 +20,7 @@ public:
     virtual void rotateShapeArc(QPoint&center,double r);//in arc
     virtual void scale(QPoint&center,double s);//不同图像的scale不一样
     virtual bool clip(QPoint&rect1,QPoint&rect2,int algorithm);
-    friend class Widget;
+    friend class MainWindow;
     void setDotted();
     void setUndotted();
     bool getDotted();

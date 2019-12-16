@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    clipdialog.cpp \
     curvedialog.cpp \
     linedialog.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     shape.cpp
 
 HEADERS += \
+    clipdialog.h \
     curvedialog.h \
     linedialog.h \
     mainwindow.h \
@@ -35,6 +37,7 @@ HEADERS += \
     shape.h
 
 FORMS += \
+    clipdialog.ui \
     curvedialog.ui \
     linedialog.ui \
     mainwindow.ui \
