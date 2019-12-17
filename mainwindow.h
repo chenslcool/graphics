@@ -201,6 +201,8 @@ private slots:
 
     void on_actionSetColor_triggered();
 
+    void on_actionCurrentColor_triggered();
+
 private:
     Ui::MainWindow *ui;
 

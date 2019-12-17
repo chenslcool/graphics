@@ -1444,3 +1444,24 @@ void MainWindow::on_actionSetColor_triggered()
         qDebug()<<"canceled";
     }
 }
+
+void MainWindow::on_actionCurrentColor_triggered()
+{
+    QColorDialog qColorDialog;
+    QColor color = qColorDialog.getColor();
+    if(color.isValid()){
+        setColor(color.red(),color.green(),color.blue());
+        qDebug()<<"color changed";
+        //要将这个颜色显示到一个Qaction上
+        int w = 20;
+        int h =20;
+        QPixmap curColorPix(w,h);
+        QPainter painter(&curColorPix);
+        painter.fillRect(0,0,w,h,color);
+        QIcon icon(curColorPix);
+        ui->actionCurrentColor->setIcon(icon);
+    }
+    else{
+        qDebug()<<"canceled";
+    }
+}
