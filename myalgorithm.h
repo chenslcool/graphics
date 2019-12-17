@@ -66,6 +66,8 @@ bool myClipLiang(QPoint&rectPoint1,QPoint&rectPoint2,QPoint&start,QPoint&end);
 
 long long myConbination(int n,int m);//计算组合数
 
+int mySumDistance(QVector<QPoint>& points);
+
 QVector<QPoint> myBezierCurve(QVector<QPoint> ctlPoints);
 
 QVector<QPoint> myBSplineCurve(QVector<QPoint> ctlPoints,int k);

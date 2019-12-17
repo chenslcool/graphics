@@ -12,5 +12,6 @@
         <file>images/scale.png</file>
         <file>images/color.png</file>
         <file>images/reset.jpg</file>
+        <file>images/currentColor.png</file>
     </qresource>
 </RCC>

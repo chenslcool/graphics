@@ -483,6 +483,11 @@ void MainWindow::getCommandFromFile(QString fileName)
     file.close();
 }
 
+void MainWindow::setSaveDir(QString dir)
+{
+    this->saveDir = dir;
+}
+
 void MainWindow::resetSelected()
 {
     if (selected == true || selectedShape != nullptr)
@@ -592,17 +597,16 @@ void MainWindow::saveCanvas(QString name)
 
 void MainWindow::setColor(int r, int g, int b, bool setByFile)
 {
-    //    QPen pen;
-    //    pen.setColor(QColor(r,b,g));
-    //    canvasPainter->setPen(pen);
     currentColor.setRgb(r, g, b);
-    //    if (setByFile == true)
-    //    {
-    //        //是从文件输入更改的颜色，要同步更新slider
-    //        ui->horizontalSliderRed->setValue(r);
-    //        ui->horizontalSliderGreen->setValue(g);
-    //        ui->horizontalSliderBlue->setValue(b);
-    //    }
+    if(setByFile){
+        int w = 20;
+        int h =20;
+        QPixmap curColorPix(w,h);
+        QPainter painter(&curColorPix);
+        painter.fillRect(0,0,w,h,currentColor);
+        QIcon icon(curColorPix);
+        ui->actionCurrentColor->setIcon(icon);
+    }
 }
 
 void MainWindow::drawLine(QPoint startPosition, QPoint endPosition, int type, int id, bool drawAll, bool updateMap)
@@ -872,12 +876,6 @@ void MainWindow::on_actionDrawEllipse_triggered()
     { //没有画布
         return;
     }
-    //    if (this->state == DrawEllipse)
-    //    {
-    //        this->state = NoInput; //两次点击，取消
-    //        qDebug()<<"press drawEllipse twice,canceled";
-    //        return;
-    //    }
     eraseMouseEventPoint();
     clickPoint.clear();
     resetSelected();
@@ -1433,6 +1431,14 @@ void MainWindow::on_actionSetColor_triggered()
     if(color.isValid()){
         setColor(color.red(),color.green(),color.blue());
         qDebug()<<"color changed";
+        //要将这个颜色显示到一个Qaction上
+        int w = 20;
+        int h =20;
+        QPixmap curColorPix(w,h);
+        QPainter painter(&curColorPix);
+        painter.fillRect(0,0,w,h,color);
+        QIcon icon(curColorPix);
+        ui->actionCurrentColor->setIcon(icon);
     }
     else{
         qDebug()<<"canceled";

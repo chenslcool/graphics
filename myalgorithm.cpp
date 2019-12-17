@@ -718,15 +718,8 @@ long long myConbination(int n,int m){
 QVector<QPoint> myBezierCurve(QVector<QPoint> ctlPoints)
 {
     //为了更好地确定step的大小，计算相邻点之间的总距离d,step = d * 5;
-    QPoint prePoint = ctlPoints[0];
-    QPoint curPoint;
     int pointNum = ctlPoints.size();
-    int sumDistances = 0;
-    for(int i = 1;i<pointNum;++i){
-        curPoint = ctlPoints[i];
-        sumDistances += (int)sqrt((double)mydistance2(prePoint,curPoint));
-        prePoint = curPoint;
-    }
+    int sumDistances = mySumDistance(ctlPoints);
     int step = sumDistances * 3;
     //先计算所有的组合数
     QVector<long long> conbinations(pointNum);
@@ -758,6 +751,7 @@ QVector<QPoint> myBezierCurve(QVector<QPoint> ctlPoints)
 
 QVector<QPoint> myBSplineCurve(QVector<QPoint> ctlPoints,int k)
 {
+    int sumDistance = mySumDistance(ctlPoints);
     QVector<QPoint> ret;
     int n = ctlPoints.size() - 1;
     //得到节点分割数组，间隔为1
@@ -768,7 +762,7 @@ QVector<QPoint> myBSplineCurve(QVector<QPoint> ctlPoints,int k)
         count += 1;
     }
     double u = uis[k - 1];//从有效区间左端开始
-    double step = 0.01;
+    double step = count/(sumDistance*3);//一共走sumDiatance*3
     for(;u < uis[n+1];u += step){
         double x = 0;
         double y = 0;
@@ -801,4 +795,18 @@ double getB(int i, int k, QVector<double>& uis, double u)
         double coef2 = (uis[i+k]-u)/(uis[i+k]-uis[i+1]);
         return  B1*coef1 + B2*coef2;
     }
+}
+
+int mySumDistance(QVector<QPoint>& ctlPoints)
+{
+    QPoint prePoint = ctlPoints[0];
+    QPoint curPoint;
+    int pointNum = ctlPoints.size();
+    int sumDistances = 0;
+    for(int i = 1;i<pointNum;++i){
+        curPoint = ctlPoints[i];
+        sumDistances += (int)sqrt((double)mydistance2(prePoint,curPoint));
+        prePoint = curPoint;
+    }
+    return sumDistances;
 }
