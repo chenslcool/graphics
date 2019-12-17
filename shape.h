@@ -73,6 +73,7 @@ public:
 //曲线支持平移、缩放、旋转
 class Curve :public Shape{
 private:
+    const int DEFUALT_BSPLINE_K = 4;//默认三次B样条
     QVector<QPoint> ctlPoints;//控制点
     int algorithm;//曲线算法
 public:

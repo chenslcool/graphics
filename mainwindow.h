@@ -203,6 +203,8 @@ private slots:
 
     void on_actionCurrentColor_triggered();
 
+    void on_actiondeleteShape_triggered();
+
 private:
     Ui::MainWindow *ui;
 

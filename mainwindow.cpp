@@ -1459,3 +1459,17 @@ void MainWindow::on_actionCurrentColor_triggered()
         qDebug()<<"canceled";
     }
 }
+
+void MainWindow::on_actiondeleteShape_triggered()
+{
+    if (canvas == nullptr)
+    { //没有画布
+        return;
+    }
+    //应该把之前的特殊红色点删除
+    eraseMouseEventPoint();
+    clickPoint.clear();
+    resetSelected();
+    this->state = DeleteShape;
+    qDebug()<<"enter delete mode";
+}

@@ -260,7 +260,7 @@ Curve::Curve(QVector<QPoint> &points, int type, int id, QColor color)
         this->points=myBezierCurve(points);
     }
     else{
-        this->points = myBSplineCurve(points,3);
+        this->points = myBSplineCurve(points,DEFUALT_BSPLINE_K);
     }
 }
 
@@ -279,7 +279,7 @@ void Curve::scale(QPoint &center, double s)
         this->points=myBezierCurve(ctlPoints);
     }
     else{//TODO another case
-        this->points = myBSplineCurve(ctlPoints,3);
+        this->points = myBSplineCurve(ctlPoints,DEFUALT_BSPLINE_K);
     }
 }
 
@@ -291,7 +291,7 @@ void Curve::rotateShapeArc(QPoint &center, double r)
         this->points=myBezierCurve(ctlPoints);
     }
     else{//TODO another case
-        this->points = myBSplineCurve(ctlPoints,3);
+        this->points = myBSplineCurve(ctlPoints,DEFUALT_BSPLINE_K);
     }
 }
 
@@ -303,6 +303,6 @@ void Curve::rotateShape(QPoint &center, int r)
         this->points=myBezierCurve(ctlPoints);
     }
     else{//TODO another case
-        this->points = myBSplineCurve(ctlPoints,3);
+        this->points = myBSplineCurve(ctlPoints,DEFUALT_BSPLINE_K);
     }
 }

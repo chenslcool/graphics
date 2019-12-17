@@ -41,6 +41,8 @@
    <addaction name="actionScale"/>
    <addaction name="separator"/>
    <addaction name="actionClipLine"/>
+   <addaction name="separator"/>
+   <addaction name="actiondeleteShape"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -78,6 +80,9 @@
    <property name="text">
     <string>DrawLine</string>
    </property>
+   <property name="toolTip">
+    <string>直线</string>
+   </property>
   </action>
   <action name="actionDrawPolygon">
    <property name="icon">
@@ -86,6 +91,9 @@
    </property>
    <property name="text">
     <string>DrawPolygon</string>
+   </property>
+   <property name="toolTip">
+    <string>多边形</string>
    </property>
   </action>
   <action name="actionDrawEllipse">
@@ -96,6 +104,9 @@
    <property name="text">
     <string>DrawEllipse</string>
    </property>
+   <property name="toolTip">
+    <string>椭圆</string>
+   </property>
   </action>
   <action name="actionDrwaCurve">
    <property name="icon">
@@ -104,6 +115,9 @@
    </property>
    <property name="text">
     <string>DrwaCurve</string>
+   </property>
+   <property name="toolTip">
+    <string>曲线</string>
    </property>
   </action>
   <action name="actionOpenCommandFile">
@@ -114,6 +128,9 @@
    <property name="text">
     <string>OpenCommandFile</string>
    </property>
+   <property name="toolTip">
+    <string>打开指令文件</string>
+   </property>
   </action>
   <action name="actionSaveCanvas">
    <property name="icon">
@@ -122,6 +139,9 @@
    </property>
    <property name="text">
     <string>SaveCanvas</string>
+   </property>
+   <property name="toolTip">
+    <string>保存画布</string>
    </property>
   </action>
   <action name="actionRotate">
@@ -132,6 +152,9 @@
    <property name="text">
     <string>Rotate</string>
    </property>
+   <property name="toolTip">
+    <string>旋转</string>
+   </property>
   </action>
   <action name="actionmove">
    <property name="icon">
@@ -140,6 +163,9 @@
    </property>
    <property name="text">
     <string>move</string>
+   </property>
+   <property name="toolTip">
+    <string>移动</string>
    </property>
   </action>
   <action name="actionScale">
@@ -150,6 +176,9 @@
    <property name="text">
     <string>Scale</string>
    </property>
+   <property name="toolTip">
+    <string>缩放</string>
+   </property>
   </action>
   <action name="actionClipLine">
    <property name="icon">
@@ -158,6 +187,9 @@
    </property>
    <property name="text">
     <string>ClipLine</string>
+   </property>
+   <property name="toolTip">
+    <string>裁剪线段</string>
    </property>
   </action>
   <action name="actionSetColor">
@@ -177,6 +209,9 @@
    <property name="text">
     <string>resetCanvas</string>
    </property>
+   <property name="toolTip">
+    <string>重置画布</string>
+   </property>
   </action>
   <action name="actionCurrentColor">
    <property name="icon">
@@ -187,7 +222,19 @@
     <string>currentColor</string>
    </property>
    <property name="toolTip">
-    <string>currentColor</string>
+    <string>调色</string>
+   </property>
+  </action>
+  <action name="actiondeleteShape">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/images/delete.png</normaloff>:/images/images/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>deleteShape</string>
+   </property>
+   <property name="toolTip">
+    <string>删除图元</string>
    </property>
   </action>
  </widget>
