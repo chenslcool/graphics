@@ -652,7 +652,7 @@ void MainWindow::drawPolygon(QVector<QPoint> &points, int type, int id, bool upd
         return;
     }
     shapes.append(new Polygon(points, type, id, currentColor));
-    drawLastToCanvas();
+    redrawAllShape();//may cause some space white
     update();
     if (updateMap == true)
         updatePointIdMap();
@@ -665,7 +665,7 @@ void MainWindow::drawCurve(QVector<QPoint> &points, int type, int id, bool updat
         return;
     }
     shapes.append(new Curve(points, type, id, currentColor));
-    drawLastToCanvas();
+    redrawAllShape();
     update();
     if (updateMap == true)
         updatePointIdMap();
@@ -931,13 +931,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         {
             //画够点了
             eraseMouseEventPoint();
-            currentMinId--; //如果先鼠标画，后文件，会不会重复？？有重复的话，修改鼠标的，暂时不考虑这个问题
-                            //            if (ui->comboBoxPolygonType->currentText() == "DDA")
-                            //                drawPolygon(clickPoint, DDA, currentMinId); //need modify type and id
-                            //            else
-                            //            {
-                            //                drawPolygon(clickPoint, Bresenham, currentMinId);
-                            //            }
+            currentMinId--;
             drawPolygon(clickPoint, polygonType, currentMinId);
             clickPoint.clear();
         }
