@@ -557,7 +557,6 @@ MainWindow::MainWindow(QWidget *parent)
     pressed = false;
     selected = false;
     selectedShape = nullptr;
-    scaleSize = 1;
 }
 
 MainWindow::~MainWindow()
@@ -701,9 +700,8 @@ void MainWindow::rotate(Shape *shape, QPoint &center, int r, bool needDelete)
     {
         if (needDelete)
             deleteShapeFromMap(shape);
-        shape->rotateShape(center, r);
+        shape->rotateShape(center, r);//将关键点旋转，再重新计算所有的像素点
         //清空、重画所有图形
-        //        canvasPainter->eraseRect(canvas->rect());//清空
         clearCanvas();
         redrawAllShape();
         update(); //dont forget it
@@ -722,7 +720,7 @@ void MainWindow::simpleRotate(Shape *shape, QPoint &center, double r)
     if (shape != nullptr)
     {
         shape->points = originalPoints;
-        myRotateArc(shape->points, center, r);
+        myRotateArc(shape->points, center, r);//简单地将所有像素点旋转，关键点没有旋转
         clearCanvas();
         drawAllToCanvas();
         update();
@@ -738,8 +736,8 @@ void MainWindow::scale(Shape *shape, QPoint &center, double s)
     if (shape != nullptr)
     {
         deleteShapeFromMap(shape);
-        shape->points = originalPoints; //!!!
-        shape->scale(center, s);        //dynamic binding
+//        shape->points = originalPoints; //写错了，这个没啥用，应该缩放关键点
+        shape->scale(center, s);        //缩放关键点后再重新画
         //清空、重画所有图形
         //        canvasPainter->eraseRect(canvas->rect());//清空
         clearCanvas();
@@ -1008,13 +1006,12 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             Shape *shape = searchIdInMap(point);
             if (shape != nullptr)
             {
-                scaleSize = 1; //reset to 1
                 selected = true;
                 //                rotateCenter = point; //name should be change,not rotate but scale,or just center
                 selectedShape = shape;
                 removeHalfPoints(shape);                //按下的时候不需要全部重绘,只要覆盖一半就行了
                 selectedShape->setDotted();             //虚线显示
-                originalPoints = selectedShape->points; // 这些原始的点作为scale的对象
+//                originalPoints = selectedShape->points; // 这些原始的点作为scale的对象
                 state = ScaleSelected;
             }
         }
@@ -1309,21 +1306,11 @@ void MainWindow::wheelEvent(QWheelEvent *event)
     }
     if (event->delta() > 0)
     {
-        if (scaleSize < 1)
-        {
-            scaleSize = 1;
-        }
-        scaleSize += 0.2;
-        scale(selectedShape, rotateCenter, scaleSize);
+        scale(selectedShape, rotateCenter, 1.2);
     }
-    else if (scaleSize > 0.21)
+    else
     {
-        if (scaleSize > 1)
-        {
-            scaleSize = 1;
-        }
-        scaleSize -= 0.2;
-        scale(selectedShape, rotateCenter, scaleSize);
+        scale(selectedShape, rotateCenter, 0.8);
     }
 }
 

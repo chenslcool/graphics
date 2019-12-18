@@ -40,8 +40,6 @@ class MainWindow : public QMainWindow
 private:
     QString saveDir;
 
-    double scaleSize;
-
     QVector<QPoint> tmpRotatePoints;
 
     QVector<QPoint> originalPoints;
