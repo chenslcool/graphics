@@ -834,21 +834,28 @@ void MainWindow::on_actionDrawLine_triggered()
     //        qDebug()<<"press drawLine twice,canceled";
     //        return;
     //    }
-    LineDialog lineDialog;
-    if (lineDialog.exec() == QDialog::Accepted)
-    {
-        lineType = lineDialog.getLineType() == "DDA" ? DDA : Bresenham;
-        //应该把之前的特殊红色点删除
-        eraseMouseEventPoint();
-        clickPoint.clear();
-        resetSelected();
-        this->state = DrawLine; //切换到画线状态
-        qDebug() << "enter DrawLine mode";
-    }
-    else
-    {
-        qDebug() << "canceled";
-    }
+//    LineDialog lineDialog;
+//    if (lineDialog.exec() == QDialog::Accepted)
+//    {
+//        lineType = lineDialog.getLineType() == "DDA" ? DDA : Bresenham;
+//        //应该把之前的特殊红色点删除
+//        eraseMouseEventPoint();
+//        clickPoint.clear();
+//        resetSelected();
+//        this->state = DrawLine; //切换到画线状态
+//        qDebug() << "enter DrawLine mode";
+//    }
+//    else
+//    {
+//        qDebug() << "canceled";
+//    }
+
+    lineType = Bresenham;//不要选择算法了，就最好的算法
+    //应该把之前的特殊红色点删除
+    eraseMouseEventPoint();
+    clickPoint.clear();
+    resetSelected();
+    this->state = DrawLine; //切换到画线状态
 }
 
 void MainWindow::on_actionresetCanvas_triggered()

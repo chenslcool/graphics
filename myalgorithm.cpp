@@ -1,5 +1,6 @@
 #include "myalgorithm.h"
 #include <cmath>
+#include <QDebug>
 #define PI 3.1415926
 
 QVector<QPoint> drawLineDda(QPoint startPoint, QPoint endPoint, bool drawStartPoint) //默认为true
@@ -768,8 +769,10 @@ QVector<QPoint> myBSplineCurve(QVector<QPoint> ctlPoints,int k)
         double y = 0;
         int i = 0;
         for(QPoint& point:ctlPoints){
-            x += point.x()*getB(i,k,uis,u);
-            y += point.y()*getB(i,k,uis,u);
+            double b = getB(i,k,uis,u);
+//            qDebug()<<b;
+            x += point.x()*b;
+            y += point.y()*b;
             ++i;
         }
         ret.append(QPoint((int)x,(int)y));
