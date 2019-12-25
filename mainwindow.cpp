@@ -155,6 +155,15 @@ void MainWindow::parseLine(QString line)
         Shape *shape = search(id);
         clip(shape, rect1, rect2, type);
     }
+    else if(command == "scale"){
+        int id = words.at(1).toInt();
+        int x1 = words.at(2).toInt();
+        int y1 = words.at(3).toInt();
+        double s = words.at(4).toDouble();
+        Shape *shape = search(id);
+        QPoint center(x1,y1);
+        scale(shape, center,s);
+    }
 }
 
 void MainWindow::drawLastToCanvas()
