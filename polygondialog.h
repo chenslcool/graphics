@@ -1,4 +1,4 @@
-#ifndef POLYGONDIALOG_H
+﻿#ifndef POLYGONDIALOG_H
 #define POLYGONDIALOG_H
 
 #include <QDialog>

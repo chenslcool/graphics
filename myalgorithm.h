@@ -1,4 +1,4 @@
-#ifndef MYALGORITHM_H
+﻿#ifndef MYALGORITHM_H
 #define MYALGORITHM_H
 #include<QPoint>
 #include<qvector.h>

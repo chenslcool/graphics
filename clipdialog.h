@@ -1,6 +1,5 @@
-#ifndef CLIPDIALOG_H
+﻿#ifndef CLIPDIALOG_H
 #define CLIPDIALOG_H
-
 #include <QDialog>
 
 namespace Ui {

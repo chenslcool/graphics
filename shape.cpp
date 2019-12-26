@@ -1,6 +1,5 @@
-#include "shape.h"
+﻿#include "shape.h"
 #include "myalgorithm.h"
-
 Shape::Shape()
 {
     id=0;

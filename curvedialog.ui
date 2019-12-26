@@ -32,20 +32,20 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>160</y>
-     <width>181</width>
-     <height>41</height>
+     <width>191</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>请输入曲线的控制点数():</string>
+    <string>请输入曲线的控制点数(&gt;=5):</string>
    </property>
   </widget>
   <widget class="QSpinBox" name="spinBoxCurveCtlNum">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>210</x>
      <y>160</y>
      <width>151</width>
      <height>31</height>

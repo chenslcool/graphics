@@ -1,6 +1,5 @@
-#ifndef CURVEDIALOG_H
+﻿#ifndef CURVEDIALOG_H
 #define CURVEDIALOG_H
-
 #include <QDialog>
 
 namespace Ui {

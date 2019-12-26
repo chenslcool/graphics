@@ -1,4 +1,4 @@
-#ifndef RESETCANVASDIALOG_H
+﻿#ifndef RESETCANVASDIALOG_H
 #define RESETCANVASDIALOG_H
 
 #include <QDialog>

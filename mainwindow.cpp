@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "polygondialog.h"
 #include "curvedialog.h"
@@ -566,6 +566,7 @@ MainWindow::MainWindow(QWidget *parent)
     pressed = false;
     selected = false;
     selectedShape = nullptr;
+    setWindowTitle("171860525");
 }
 
 MainWindow::~MainWindow()
@@ -899,6 +900,7 @@ void MainWindow::on_actionDrawEllipse_triggered()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event)
     if (canvas == nullptr)
     { //还没有画布
         return;
@@ -1332,6 +1334,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    Q_UNUSED(event)
     //    fclose(fd);
 }
 
@@ -1387,17 +1390,19 @@ void MainWindow::on_actionClipLine_triggered()
     eraseMouseEventPoint();
     clickPoint.clear();
     resetSelected();
-    clipDialog dlog;
-    if (dlog.exec() == QDialog::Accepted)
-    {
-        clipType = dlog.getClipTyoe() == "Cohen-Sutherland" ? Cohen : Liang;
-        state = Clip;
-        qDebug() << "enter clip mode";
-    }
-    else
-    {
-        qDebug() << "canceled";
-    }
+//    clipDialog dlog;
+//    if (dlog.exec() == QDialog::Accepted)
+//    {
+//        clipType = dlog.getClipTyoe() == "Cohen-Sutherland" ? Cohen : Liang;
+//        state = Clip;
+//        qDebug() << "enter clip mode";
+//    }
+//    else
+//    {
+//        qDebug() << "canceled";
+//    }
+    clipType = Liang;
+    state = Clip;
 }
 
 void MainWindow::on_actionOpenCommandFile_triggered()

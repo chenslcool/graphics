@@ -1,6 +1,7 @@
-#include "myalgorithm.h"
+﻿#include "myalgorithm.h"
 #include <cmath>
 #include <QDebug>
+
 #define PI 3.1415926
 
 QVector<QPoint> drawLineDda(QPoint startPoint, QPoint endPoint, bool drawStartPoint) //默认为true
