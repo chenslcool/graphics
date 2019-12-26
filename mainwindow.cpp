@@ -20,6 +20,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QColorDialog>
+#include <QLabel>
 
 bool operator<(const QPoint &p1, const QPoint &p2)
 {
@@ -550,6 +551,11 @@ void MainWindow::drawTempRect(QPoint &rectPoint1, QPoint &rectPoint2)
     update();
 }
 
+void MainWindow::setHint(QString hint)
+{
+    msg->setText(hint);
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -566,7 +572,11 @@ MainWindow::MainWindow(QWidget *parent)
     pressed = false;
     selected = false;
     selectedShape = nullptr;
-    setWindowTitle("171860525");
+    setWindowTitle(QString("171860525 陈善梁"));
+
+    msg = new QLabel;
+    msg->setText(QString("提示"));
+    ui->statusbar->addPermanentWidget(msg);
 }
 
 MainWindow::~MainWindow()
@@ -798,6 +808,7 @@ void MainWindow::on_actionDrawPolygon_triggered()
         lineNum = polygonDialog.getLineNum();
         polygonType = polygonDialog.getType() == "DDA" ? DDA : Bresenham;
         state = DrawPolygon;
+        setHint("绘制多边形，点数 = "+ QString::number(lineNum));
         qDebug() << "enter drawEllipse mode";
     }
     else
@@ -824,6 +835,7 @@ void MainWindow::on_actionDrwaCurve_triggered()
         curvePtsNum = curveDialog.getCtlNum();
         curveType = curveDialog.getCurveType() == "Bezier" ? Bezier : BSpline;
         state = DrawCurve;
+        setHint("开始绘制曲线，控制点数 = "+ QString::number(curvePtsNum));
         qDebug() << "enter drawCurve mode";
     }
     else
@@ -866,6 +878,8 @@ void MainWindow::on_actionDrawLine_triggered()
     clickPoint.clear();
     resetSelected();
     this->state = DrawLine; //切换到画线状态
+
+    setHint("开始画线");
 }
 
 void MainWindow::on_actionresetCanvas_triggered()
@@ -878,11 +892,14 @@ void MainWindow::on_actionresetCanvas_triggered()
         int h = dlog.getHeight();
         qDebug() << "press ok,w=" << w << "h=" << h;
         resetCanvas(w, h);
+        setHint("已重置画布");
     }
     else
     {
         qDebug() << "canceled";
     }
+
+
 }
 
 void MainWindow::on_actionDrawEllipse_triggered()
@@ -895,6 +912,7 @@ void MainWindow::on_actionDrawEllipse_triggered()
     clickPoint.clear();
     resetSelected();
     state = DrawEllipse;
+    setHint("绘制椭圆");
     qDebug() << "enter drawEllipse mode";
 }
 
@@ -929,6 +947,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         QPoint curPoint = event->pos(); //得到在Widget的位置，要转化成在canvas的位置-150,-150
         fixPoint(curPoint);
         clickPoint.append(curPoint);
+
+        setHint("线段：已选中线段起点，保持左键按下，拖动鼠标画线");
     }
     break;
     case DrawEllipse:
@@ -936,12 +956,15 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         QPoint curPoint = event->pos(); //得到在Widget的位置，要转化成在canvas的位置-150,-150
         fixPoint(curPoint);
         clickPoint.append(curPoint);
+
+        setHint("椭圆：已选择外接矩形一个顶点，保持左键按下，拖动鼠标画椭圆");
     }
     break;
     case DrawPolygon:
     {
         //这时候lineNum应该是合理的 >=3
         drawMouseEventPoint(event);
+        setHint("多边形：已选择"+QString::number(clickPoint.length())+"个点");
         //        clickPoint.append(event->pos());
         if (clickPoint.length() == lineNum)
         {
@@ -950,6 +973,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             currentMinId--;
             drawPolygon(clickPoint, polygonType, currentMinId);
             clickPoint.clear();
+            setHint("多边形绘制结束");
         }
     }
     break;
@@ -966,6 +990,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             selectedShape = shape;
             removeHalfPoints(shape);    //按下的时候不需要全部重绘,只要覆盖一半就行了
             selectedShape->setDotted(); //虚线显示
+            setHint("成功选中图元,保持左键按下，移动鼠标进行图元移动");
+        }
+        else{
+            setHint("未成功选中图元");
         }
     }
     break;
@@ -983,6 +1011,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                                         //            deleteShapeFromMap(selectedShape); //对应的像素点从map中删除
             //if delete from map and then cancle rotate? this is a bug
             //delete it later?
+            setHint("成功选中图元，继续旋转旋转中心");
+        }
+        else{
+            setHint("未成功选中图元，请重新选择");
         }
     }
     break;
@@ -996,6 +1028,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         clearCanvas(); //after selected,remove selected mark(half red)
         redrawAllShape();
         drawMouseEventPoint(event);
+
+        setHint("已选中旋转中心,点击鼠标拖动进行旋转");
     }
     break;
     case GotCenter:
@@ -1031,6 +1065,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 selectedShape->setDotted();             //虚线显示
 //                originalPoints = selectedShape->points; // 这些原始的点作为scale的对象
                 state = ScaleSelected;
+                setHint("成功选中图元,请点击选择放缩中心");
+            }
+            else{
+                setHint("未成功选中图元");
             }
         }
     }
@@ -1044,6 +1082,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         //        selectedShape->setUndotted();
         drawMouseEventPoint(event); //draw center in red
         state = ScaleFinished;
+        setHint("通过鼠标滚轮进行放缩");
     }
     break;
     case ScaleFinished:
@@ -1055,6 +1094,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         clearCanvas();
         drawAllToCanvas();
         update();
+        setHint("放缩结束");
     }
     break;
     case DeleteShape:
@@ -1066,6 +1106,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         {
             //delete
             deleteShape(shape);
+            setHint("成功删除图元");
         }
     }
     break;
@@ -1080,6 +1121,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             selectedShape = shape;
             removeHalfPoints(shape);
             selectedShape->setDotted();
+            setHint("成功选中图元,请选择裁剪矩形");
+        }
+        else{
+            setHint("未成功选中图元");
         }
     }
     break;
@@ -1090,11 +1135,13 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         clickPoint.append(point);
         drawMouseEventPoint(event);
         state = ClipOneRectSelected;
+        setHint("已选中裁剪矩形一个顶点，保持左键按下，移动鼠标改变裁剪矩形窗口");
     }
     break;
     case DrawCurve:
     {
         drawMouseEventPoint(event);
+        setHint("曲线：已选择"+QString::number(clickPoint.length())+"个点");
         if (clickPoint.length() == curvePtsNum)
         {
             //画够点了
@@ -1102,6 +1149,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             currentMinId--; //如果先鼠标画，后文件，会不会重复？？有重复的话，修改鼠标的，暂时不考虑这个问题
             drawCurve(clickPoint, curveType, currentMinId);
             clickPoint.clear();
+            setHint("曲线绘制结束");
         }
     }
     break;
@@ -1144,6 +1192,8 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
         drawLine(clickPoint.first(), point, lineType, currentMinId, true);
         drawntempLine = false;
         clickPoint.clear();
+
+        setHint("绘制线段结束");
     }
     break;
     case DrawEllipse:
@@ -1169,6 +1219,8 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
         drawEllipse(ellicenter, rx, ry, currentMinId, true);
         drawntempEllipse = false;
         clickPoint.clear();
+
+        setHint("绘制椭圆结束");
     }
     break;
     case TransLate:
@@ -1183,6 +1235,8 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
         selectedShape->setUndotted();
         translate(selectedShape, dx, dy);
         selectedShape = nullptr;
+
+        setHint("平移结束");
     }
     break;
     case GotStart:
@@ -1195,6 +1249,8 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
         state = Rotate;
         selectedShape = nullptr;
         selected = false;
+
+        setHint("旋转结束");
     }
     break;
     case ClipOneRectSelected:
@@ -1205,6 +1261,8 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
         clip(selectedShape, clickPoint[0], point, clipType); //need add a comboboxS
         state = Clip;
         clickPoint.clear();
+
+        setHint("线段裁剪结束");
     }
     break;
     default:
@@ -1349,6 +1407,7 @@ void MainWindow::on_actionmove_triggered()
     clickPoint.clear();
     resetSelected();
     state = TransLate;
+    setHint("移动：请点击选择图元");
     qDebug() << "enter translate mode";
 }
 
@@ -1363,6 +1422,7 @@ void MainWindow::on_actionRotate_triggered()
     clickPoint.clear();
     resetSelected();
     state = Rotate;
+    setHint("旋转：请点击选择图元");
     qDebug() << "enter rotate mode";
 }
 
@@ -1377,6 +1437,7 @@ void MainWindow::on_actionScale_triggered()
     clickPoint.clear();
     resetSelected();
     state = Scale;
+    setHint("缩放：请点击选择图元");
     qDebug() << "enter scale mode";
 }
 
@@ -1403,6 +1464,7 @@ void MainWindow::on_actionClipLine_triggered()
 //    }
     clipType = Liang;
     state = Clip;
+    setHint("线段裁剪：请点击选择图元");
 }
 
 void MainWindow::on_actionOpenCommandFile_triggered()
@@ -1424,27 +1486,6 @@ void MainWindow::on_actionSaveCanvas_triggered()
     if (fileName.isEmpty())
         return;
     saveCanvas(fileName);
-}
-
-void MainWindow::on_actionSetColor_triggered()
-{
-    QColorDialog qColorDialog;
-    QColor color = qColorDialog.getColor();
-    if(color.isValid()){
-        setColor(color.red(),color.green(),color.blue());
-        qDebug()<<"color changed";
-        //要将这个颜色显示到一个Qaction上
-        int w = 20;
-        int h =20;
-        QPixmap curColorPix(w,h);
-        QPainter painter(&curColorPix);
-        painter.fillRect(0,0,w,h,color);
-        QIcon icon(curColorPix);
-        ui->actionCurrentColor->setIcon(icon);
-    }
-    else{
-        qDebug()<<"canceled";
-    }
 }
 
 void MainWindow::on_actionCurrentColor_triggered()
@@ -1479,5 +1520,7 @@ void MainWindow::on_actiondeleteShape_triggered()
     clickPoint.clear();
     resetSelected();
     this->state = DeleteShape;
+
+    setHint(QString("删除：请点击选择图元"));
     qDebug()<<"enter delete mode";
 }

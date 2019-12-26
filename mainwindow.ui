@@ -43,6 +43,7 @@
    <addaction name="actionClipLine"/>
    <addaction name="separator"/>
    <addaction name="actiondeleteShape"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -235,6 +236,11 @@
    </property>
    <property name="toolTip">
     <string>删除图元</string>
+   </property>
+  </action>
+  <action name="actionhint">
+   <property name="text">
+    <string>hint</string>
    </property>
   </action>
  </widget>

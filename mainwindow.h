@@ -5,6 +5,7 @@
 #include "shape.h"
 #include <QMap>
 #include <QPoint>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,6 +39,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
+    QLabel * msg;
+
     QString saveDir;
 
     QVector<QPoint> tmpRotatePoints;
@@ -136,6 +139,8 @@ private:
 
     void drawTempRect(QPoint &p1,QPoint&p2);
 
+    void setHint(QString hint);
+
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -196,8 +201,6 @@ private slots:
     void on_actionOpenCommandFile_triggered();
 
     void on_actionSaveCanvas_triggered();
-
-    void on_actionSetColor_triggered();
 
     void on_actionCurrentColor_triggered();
 
