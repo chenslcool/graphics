@@ -722,7 +722,7 @@ QVector<QPoint> myBezierCurve(QVector<QPoint> ctlPoints)
     //为了更好地确定step的大小，计算相邻点之间的总距离d,step = d * 5;
     int pointNum = ctlPoints.size();
     int sumDistances = mySumDistance(ctlPoints);
-    int step = sumDistances * 3;
+    int step = sumDistances;
     //先计算所有的组合数
     QVector<long long> conbinations(pointNum);
     int maxLevel = pointNum - 1;//最高阶数
@@ -764,7 +764,7 @@ QVector<QPoint> myBSplineCurve(QVector<QPoint> ctlPoints,int k)
         count += 1;
     }
     double u = uis[k - 1];//从有效区间左端开始
-    double step = count/(sumDistance*3);//一共走sumDiatance*3
+    double step = count/(sumDistance);//一共走sumDiatance*3
     for(;u < uis[n+1];u += step){
         double x = 0;
         double y = 0;

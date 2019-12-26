@@ -24,6 +24,8 @@ public:
     void setDotted();
     void setUndotted();
     bool getDotted();
+    void setColor(QColor color);
+    QColor getColor();
     virtual ~Shape(){}
 };
 

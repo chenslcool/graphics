@@ -50,6 +50,16 @@ bool Shape::getDotted()
     return dotted;
 }
 
+void Shape::setColor(QColor color)
+{
+    this->color = color;
+}
+
+QColor Shape::getColor()
+{
+    return this->color;
+}
+
 
 Line::Line(int id)
 {

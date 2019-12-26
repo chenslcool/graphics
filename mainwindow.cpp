@@ -265,14 +265,17 @@ void MainWindow::eraseMouseEventPoint() //从画布上抹去红点,不改变clic
     { //没有画布
         return;
     }
-    QPen prePen = canvasPainter->pen();
-    QPen tempPen(Qt::white, 5);
-    canvasPainter->setPen(tempPen);
-    for (QPoint point : clickPoint)
-    {
-        canvasPainter->drawPoint(point);
-    }
-    canvasPainter->setPen(prePen);
+//    QPen prePen = canvasPainter->pen();
+//    QPen tempPen(Qt::white, 5);
+//    canvasPainter->setPen(tempPen);
+//    for (QPoint point : clickPoint)
+//    {
+//        canvasPainter->drawPoint(point);
+//    }
+//    canvasPainter->setPen(prePen);
+//    update();
+    clearCanvas();//清空画布
+    redrawAllShape();//重新绘制就行了
     update();
     //    clickPoint.clear();
 }
@@ -396,33 +399,6 @@ Shape *MainWindow::searchIdInMap(QPoint &point)
     }
     //fprintf(fd,"in searchIdInMap(),no suitable point return null\n");
     return nullptr;
-}
-
-void MainWindow::removeHalfPoints(Shape *shape)
-{
-    if (canvas == nullptr)
-    { //没有画布
-        return;
-    }
-    QPen prePen = canvasPainter->pen();
-    int i = 0;
-    for (QPoint point : shape->points)
-    {
-        //先把原来的画白
-        if (i % 2 == 0)
-        {
-            canvasPainter->setPen(Qt::red);
-            canvasPainter->drawPoint(point);
-        }
-        else
-        {
-            canvasPainter->setPen(Qt::white);
-            canvasPainter->drawPoint(point);
-        }
-        ++i;
-    }
-    canvasPainter->setPen(prePen);
-    update();
 }
 
 QVector<QPoint> MainWindow::pointNeighbors(QPoint &point)
@@ -554,6 +530,17 @@ void MainWindow::drawTempRect(QPoint &rectPoint1, QPoint &rectPoint2)
 void MainWindow::setHint(QString hint)
 {
     msg->setText(hint);
+}
+
+void MainWindow::showSelected(Shape *shape)
+{
+    shape->setDotted(); //虚线显示
+    QColor preColor = shape->getColor();
+    shape->setColor(Qt::red);
+    clearCanvas();
+    redrawAllShape();
+    update();
+    shape->setColor(preColor);
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -802,6 +789,10 @@ void MainWindow::on_actionDrawPolygon_triggered()
     //        return;
     //    }
     //当初窗口输入边数，进行检查
+
+    clickPoint.clear();
+    resetSelected();
+    eraseMouseEventPoint();
     PolygonDialog polygonDialog;
     if (polygonDialog.exec() == QDialog::Accepted)
     {
@@ -829,6 +820,11 @@ void MainWindow::on_actionDrwaCurve_triggered()
     //        qDebug()<<"press drawCurve twice,canceled";
     //        return;
     //    }
+
+    clickPoint.clear();
+    resetSelected();
+    eraseMouseEventPoint();
+
     CurveDialog curveDialog;
     if (curveDialog.exec() == QDialog::Accepted)
     {
@@ -872,11 +868,12 @@ void MainWindow::on_actionDrawLine_triggered()
 //        qDebug() << "canceled";
 //    }
 
-    lineType = Bresenham;//不要选择算法了，就最好的算法
-    //应该把之前的特殊红色点删除
-    eraseMouseEventPoint();
+
     clickPoint.clear();
     resetSelected();
+    eraseMouseEventPoint();
+
+    lineType = Bresenham;//不要选择算法了，就最好的算法
     this->state = DrawLine; //切换到画线状态
 
     setHint("开始画线");
@@ -885,6 +882,11 @@ void MainWindow::on_actionDrawLine_triggered()
 void MainWindow::on_actionresetCanvas_triggered()
 {
     //弹出对话框输入画布尺寸
+
+    clickPoint.clear();
+    resetSelected();
+    eraseMouseEventPoint();
+
     resetCanvasDialog dlog;
     if (dlog.exec() == QDialog::Accepted)
     {
@@ -908,9 +910,9 @@ void MainWindow::on_actionDrawEllipse_triggered()
     { //没有画布
         return;
     }
-    eraseMouseEventPoint();
     clickPoint.clear();
     resetSelected();
+    eraseMouseEventPoint();
     state = DrawEllipse;
     setHint("绘制椭圆");
     qDebug() << "enter drawEllipse mode";
@@ -988,8 +990,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             selected = true;
             translateStart = point; //平移起点
             selectedShape = shape;
-            removeHalfPoints(shape);    //按下的时候不需要全部重绘,只要覆盖一半就行了
-            selectedShape->setDotted(); //虚线显示
+            showSelected(selectedShape);
             setHint("成功选中图元,保持左键按下，移动鼠标进行图元移动");
         }
         else{
@@ -1006,11 +1007,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         {
             state = RotateSelected;
             selectedShape = shape;
-            removeHalfPoints(shape);
-            selectedShape->setDotted(); //to early??
-                                        //            deleteShapeFromMap(selectedShape); //对应的像素点从map中删除
-            //if delete from map and then cancle rotate? this is a bug
-            //delete it later?
+            showSelected(selectedShape);
             setHint("成功选中图元，继续旋转旋转中心");
         }
         else{
@@ -1061,10 +1058,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 selected = true;
                 //                rotateCenter = point; //name should be change,not rotate but scale,or just center
                 selectedShape = shape;
-                removeHalfPoints(shape);                //按下的时候不需要全部重绘,只要覆盖一半就行了
-                selectedShape->setDotted();             //虚线显示
-//                originalPoints = selectedShape->points; // 这些原始的点作为scale的对象
                 state = ScaleSelected;
+                showSelected(selectedShape);
                 setHint("成功选中图元,请点击选择放缩中心");
             }
             else{
@@ -1108,6 +1103,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             deleteShape(shape);
             setHint("成功删除图元");
         }
+        else{
+            setHint("未成功选中图元");
+        }
     }
     break;
     case Clip:
@@ -1119,8 +1117,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         {
             state = ClipSelected;
             selectedShape = shape;
-            removeHalfPoints(shape);
-            selectedShape->setDotted();
+            showSelected(selectedShape);
             setHint("成功选中图元,请选择裁剪矩形");
         }
         else{
@@ -1146,7 +1143,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         {
             //画够点了
             eraseMouseEventPoint();
-            currentMinId--; //如果先鼠标画，后文件，会不会重复？？有重复的话，修改鼠标的，暂时不考虑这个问题
+            currentMinId--;
             drawCurve(clickPoint, curveType, currentMinId);
             clickPoint.clear();
             setHint("曲线绘制结束");
@@ -1481,6 +1478,7 @@ void MainWindow::on_actionSaveCanvas_triggered()
     { //没有画布
         return;
     }
+    clickPoint.clear();
     resetSelected();
     QString fileName = QFileDialog::getSaveFileName(this, "Save Image", ".", ".bmp");
     if (fileName.isEmpty())

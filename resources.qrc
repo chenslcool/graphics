@@ -11,7 +11,7 @@
         <file>images/save.png</file>
         <file>images/scale.png</file>
         <file>images/color.png</file>
-        <file>images/reset.jpg</file>
+        <file>images/reset.png</file>
         <file>images/currentColor.png</file>
         <file>images/delete.png</file>
     </qresource>

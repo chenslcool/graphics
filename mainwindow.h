@@ -127,8 +127,6 @@ private:
 
     Shape *searchIdInMap(QPoint&point);//查看这个point属于哪个图元(返回第一个)
 
-    void removeHalfPoints(Shape*shape);//把一半的点画成白点
-
     QVector<QPoint> pointNeighbors(QPoint&point);//返回邻近的点
 
     QVector<QPoint> pointNeighbors2(QPoint&point);
@@ -140,6 +138,8 @@ private:
     void drawTempRect(QPoint &p1,QPoint&p2);
 
     void setHint(QString hint);
+
+    void showSelected(Shape* shape);//将这个图形用用色虚线标出并刷新一次恢复
 
 public:
     MainWindow(QWidget *parent = nullptr);
